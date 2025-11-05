@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from sqlmodel import select
 from typing import List
 from Database import SessionDep
-from Models import Pedido, PedidoCreate, PedidoRead, PedidoBase, Usuario, Alimento
+from Models import Pedido, PedidoCreate, PedidoRead, PedidoBase, Usuario, Alimento, PedidoReadWithAlimentos
 
 router = APIRouter(prefix="/pedidos", tags=["Pedidos"])
 
@@ -11,13 +11,16 @@ router = APIRouter(prefix="/pedidos", tags=["Pedidos"])
 def create_pedido(session: SessionDep, pedido: PedidoCreate):
     if not session.get(Usuario, pedido.cliente_id):
         raise HTTPException(status_code=404, detail="Cliente no encontrado")
+
     pedido_data = pedido.model_dump(exclude={"alimentos_ids"})
     db_pedido = Pedido(**pedido_data)
+
     for alimento_id in pedido.alimentos_ids:
         alimento = session.get(Alimento, alimento_id)
         if not alimento:
             raise HTTPException(status_code=404, detail=f"Alimento id {alimento_id} no encontrado")
         db_pedido.alimentos.append(alimento)
+
     session.add(db_pedido)
     session.commit()
     session.refresh(db_pedido)
@@ -30,7 +33,7 @@ def read_pedidos(session: SessionDep):
     return pedidos
 
 
-@router.get("/{pedido_id}", response_model=PedidoRead)
+@router.get("/{pedido_id}", response_model=PedidoReadWithAlimentos)
 def read_pedido(session: SessionDep, pedido_id: int):
     pedido = session.get(Pedido, pedido_id)
     if not pedido:
