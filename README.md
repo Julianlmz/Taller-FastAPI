@@ -1,4 +1,4 @@
-# API Nutribox
+# API Nutribox 🍎
 
 API REST para la gestión de usuarios, loncheras, alimentos y pedidos desarrollada con FastAPI y SQLModel.
 
@@ -17,33 +17,34 @@ Nutribox es una aplicación que permite a los usuarios gestionar loncheras salud
 
 ```
 .
-├── main.py           # Punto de entrada de la aplicación
-├── Database.py       # Configuración de base de datos y sesiones
-├── Models.py         # Modelos de datos SQLModel
-├── Usuario.py        # Endpoints de usuarios
-├── Loncheras.py      # Endpoints de loncheras
-├── Alimentos.py      # Endpoints de alimentos
-├── Pedidos.py        # Endpoints de pedidos
-└── pets.sqlite3      # Base de datos SQLite
+├── main.py              # Punto de entrada de la aplicación
+├── Database.py          # Configuración de base de datos y sesiones
+├── Models.py            # Modelos de datos SQLModel
+├── Usuario.py           # Endpoints de usuarios
+├── Loncheras.py         # Endpoints de loncheras
+├── Alimentos.py         # Endpoints de alimentos
+├── Pedidos.py           # Endpoints de pedidos
+├── requirements.txt     # Dependencias del proyecto
+└── pets.sqlite3         # Base de datos SQLite (generada automáticamente)
 ```
 
 ## Instalación
 
-1. Clonar el repositorio:
+1. **Clonar el repositorio:**
 ```bash
 git clone <url-del-repositorio>
 cd "Taller FastAPI"
 ```
 
-2. Crear entorno virtual:
+2. **Crear entorno virtual:**
 ```bash
 python -m venv venv
 source venv/bin/activate  # En Windows: venv\Scripts\activate
 ```
 
-3. Instalar dependencias:
+3. **Instalar dependencias:**
 ```bash
-pip install fastapi sqlmodel uvicorn
+pip install -r requirements.txt
 ```
 
 ## Ejecución
@@ -62,35 +63,43 @@ Documentación interactiva: `http://localhost:8000/docs`
 
 ### Usuarios (`/usuarios`)
 
-- `POST /usuarios/` - Crear nuevo usuario
-- `GET /usuarios/` - Listar todos los usuarios
-- `GET /usuarios/{user_id}` - Obtener usuario por ID
-- `PATCH /usuarios/{user_id}` - Actualizar usuario
-- `DELETE /usuarios/{user_id}` - Eliminar usuario
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| POST | `/usuarios/` | Crear nuevo usuario |
+| GET | `/usuarios/` | Listar todos los usuarios |
+| GET | `/usuarios/{user_id}` | Obtener usuario por ID |
+| PATCH | `/usuarios/{user_id}` | Actualizar usuario |
+| DELETE | `/usuarios/{user_id}` | Eliminar usuario |
 
 ### Loncheras (`/loncheras`)
 
-- `POST /loncheras/` - Crear nueva lonchera
-- `GET /loncheras/` - Listar todas las loncheras
-- `GET /loncheras/{lonchera_id}` - Obtener lonchera por ID
-- `PATCH /loncheras/{lonchera_id}` - Actualizar lonchera
-- `DELETE /loncheras/{lonchera_id}` - Eliminar lonchera
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| POST | `/loncheras/` | Crear nueva lonchera |
+| GET | `/loncheras/` | Listar todas las loncheras |
+| GET | `/loncheras/{lonchera_id}` | Obtener lonchera por ID |
+| PATCH | `/loncheras/{lonchera_id}` | Actualizar lonchera |
+| DELETE | `/loncheras/{lonchera_id}` | Eliminar lonchera |
 
 ### Alimentos (`/alimentos`)
 
-- `POST /alimentos/` - Crear nuevo alimento
-- `GET /alimentos/` - Listar todos los alimentos
-- `GET /alimentos/{alimento_id}` - Obtener alimento por ID
-- `PATCH /alimentos/{alimento_id}` - Actualizar alimento
-- `DELETE /alimentos/{alimento_id}` - Eliminar alimento
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| POST | `/alimentos/` | Crear nuevo alimento |
+| GET | `/alimentos/` | Listar todos los alimentos |
+| GET | `/alimentos/{alimento_id}` | Obtener alimento por ID |
+| PATCH | `/alimentos/{alimento_id}` | Actualizar alimento |
+| DELETE | `/alimentos/{alimento_id}` | Eliminar alimento |
 
 ### Pedidos (`/pedidos`)
 
-- `POST /pedidos/` - Crear nuevo pedido
-- `GET /pedidos/` - Listar todos los pedidos
-- `GET /pedidos/{pedido_id}` - Obtener pedido por ID
-- `PATCH /pedidos/{pedido_id}` - Actualizar pedido
-- `DELETE /pedidos/{pedido_id}` - Eliminar pedido
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| POST | `/pedidos/` | Crear nuevo pedido |
+| GET | `/pedidos/` | Listar todos los pedidos |
+| GET | `/pedidos/{pedido_id}` | Obtener pedido por ID (incluye alimentos) |
+| PATCH | `/pedidos/{pedido_id}` | Actualizar pedido |
+| DELETE | `/pedidos/{pedido_id}` | Eliminar pedido |
 
 ## Modelos de Datos
 
@@ -99,7 +108,7 @@ Documentación interactiva: `http://localhost:8000/docs`
 {
   "email": "usuario@ejemplo.com",
   "nombre": "Juan Pérez",
-  "password": "contraseña123"
+  "edad": 25
 }
 ```
 
@@ -126,7 +135,8 @@ Documentación interactiva: `http://localhost:8000/docs`
 {
   "fecha": "2024-11-05",
   "estado": "pendiente",
-  "cliente_id": 1
+  "cliente_id": 1,
+  "alimentos_ids": [1, 2, 3]
 }
 ```
 
@@ -135,16 +145,18 @@ Documentación interactiva: `http://localhost:8000/docs`
 - Un **Usuario** puede tener múltiples **Loncheras** y **Pedidos**
 - Una **Lonchera** pertenece a un **Usuario** (propietario)
 - Un **Pedido** pertenece a un **Usuario** (cliente) y puede contener múltiples **Alimentos**
+- Un **Alimento** puede estar en múltiples **Pedidos** (relación many-to-many)
 
 ## Características
 
-- ✅ CRUD completo para todos los recursos
-- ✅ Validación automática de datos con Pydantic
-- ✅ Documentación interactiva automática (Swagger/OpenAPI)
-- ✅ Manejo de relaciones entre entidades
-- ✅ Validación de claves foráneas
-- ✅ Mensajes de error descriptivos
-- ✅ Base de datos SQLite persistente
+✅ CRUD completo para todos los recursos  
+✅ Validación automática de datos con Pydantic  
+✅ Documentación interactiva automática (Swagger/OpenAPI)  
+✅ Manejo de relaciones entre entidades  
+✅ Relación many-to-many entre Pedidos y Alimentos  
+✅ Validación de claves foráneas  
+✅ Mensajes de error descriptivos  
+✅ Base de datos SQLite persistente  
 
 ## Documentación Interactiva
 
@@ -153,20 +165,68 @@ Una vez iniciado el servidor, puedes acceder a:
 - **Swagger UI**: `http://localhost:8000/docs`
 - **ReDoc**: `http://localhost:8000/redoc`
 
-## Notas de Seguridad
+## Ejemplo de Uso
 
-⚠️ **Importante**: Este proyecto es para propósitos educativos. En producción deberías:
+### 1. Crear un usuario
+```bash
+curl -X POST "http://localhost:8000/usuarios/" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "juan@ejemplo.com",
+    "nombre": "Juan Pérez",
+    "edad": 25
+  }'
+```
 
-- Implementar un sistema de hash de contraseñas robusto (bcrypt, argon2)
-- Agregar autenticación y autorización (JWT, OAuth2)
-- Validar y sanitizar todos los inputs
-- Usar variables de entorno para configuraciones sensibles
-- Implementar rate limiting
-- Usar HTTPS en producción
+### 2. Crear un alimento
+```bash
+curl -X POST "http://localhost:8000/alimentos/" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nombre": "Manzana",
+    "calorias": 52.0,
+    "descripcion": "Fruta rica en fibra"
+  }'
+```
+
+### 3. Crear un pedido con alimentos
+```bash
+curl -X POST "http://localhost:8000/pedidos/" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fecha": "2024-11-05",
+    "estado": "pendiente",
+    "cliente_id": 1,
+    "alimentos_ids": [1, 2]
+  }'
+```
+
+## Comandos Útiles
+
+```bash
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Ejecutar servidor
+uvicorn main:app --reload
+
+# Ejecutar en un puerto específico
+uvicorn main:app --reload --port 8080
+
+# Ver ayuda de uvicorn
+uvicorn --help
+```
+
+## Notas de Desarrollo
+
+- La base de datos SQLite se crea automáticamente al iniciar la aplicación
+- Las tablas se generan automáticamente basadas en los modelos de SQLModel
+- Los cambios en el código se recargan automáticamente con `--reload`
+- El campo `edad` es obligatorio para crear usuarios
 
 ## Autor
 
-Julian Leal - 67001277
+Proyecto desarrollado como taller de FastAPI.
 
 ## Licencia
 
