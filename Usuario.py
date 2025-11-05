@@ -9,8 +9,7 @@ router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
 
 @router.post("/", response_model=UsuarioRead)
 def create_user(session: SessionDep, user: UsuarioCreate):
-    password_hash = user.password + "_hashed"
-    db_user = Usuario.model_validate(user, update={"password_hash": password_hash})
+    db_user = Usuario.model_validate(user)
     session.add(db_user)
     session.commit()
     session.refresh(db_user)
