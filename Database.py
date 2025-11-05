@@ -3,7 +3,7 @@ from sqlmodel import SQLModel, create_engine, Session
 from fastapi import Depends, FastAPI
 
 
-db_name = "pets.sqlite3"
+db_name = "NutriBox.db"
 db_url = f"sqlite:///{db_name}"
 
 engine = create_engine(db_url)
