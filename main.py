@@ -1,13 +1,17 @@
 from fastapi import FastAPI
-from Database import create_tables
+from Database import engine
+from sqlmodel import SQLModel
 import Alimentos
 import Loncheras
 import Pedidos
 import Usuario
 
-app = FastAPI(title="API de Nutribox", description="API para gestionar usuarios, loncheras, alimentos y pedidos.")
+app = FastAPI(
+    title="API de Nutribox",
+    description="API para gestionar usuarios, loncheras, alimentos y pedidos."
+)
 
-create_tables()
+SQLModel.metadata.create_all(engine)
 
 app.include_router(Usuario.router)
 app.include_router(Loncheras.router)
