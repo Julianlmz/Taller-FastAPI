@@ -2,20 +2,25 @@ from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, List
 import datetime
 
+class PedidoAlimento(SQLModel, table=True):
+    pedido_id: int = Field(foreign_key="pedido.id", primary_key=True)
+    alimento_id: int = Field(foreign_key="alimento.id", primary_key=True)
+
+
 class UsuarioBase(SQLModel):
     email: str = Field(unique=True, index=True)
     nombre: str
+    edad: int
 
 
 class Usuario(UsuarioBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    password_hash: str
     loncheras: List["Lonchera"] = Relationship(back_populates="propietario")
     pedidos: List["Pedido"] = Relationship(back_populates="cliente")
 
 
 class UsuarioCreate(UsuarioBase):
-    password: str
+    pass
 
 
 class UsuarioRead(UsuarioBase):
@@ -50,6 +55,7 @@ class AlimentoBase(SQLModel):
 
 class Alimento(AlimentoBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    pedidos: List["Pedido"] = Relationship(back_populates="alimentos", link_model=PedidoAlimento)
 
 
 class AlimentoCreate(AlimentoBase):
@@ -69,12 +75,18 @@ class Pedido(PedidoBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     cliente_id: int = Field(foreign_key="usuario.id")
     cliente: Usuario = Relationship(back_populates="pedidos")
+    alimentos: List[Alimento] = Relationship(back_populates="pedidos", link_model=PedidoAlimento)
 
 
 class PedidoCreate(PedidoBase):
     cliente_id: int
+    alimentos_ids: List[int] = []
 
 
 class PedidoRead(PedidoBase):
     id: int
     cliente_id: int
+
+
+class PedidoReadWithAlimentos(PedidoRead):
+    alimentos: List[AlimentoRead] = []
