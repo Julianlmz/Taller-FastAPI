@@ -25,7 +25,7 @@ Nutribox es una aplicación que permite a los usuarios gestionar loncheras salud
 ├── Alimentos.py         # Endpoints de alimentos
 ├── Pedidos.py           # Endpoints de pedidos
 ├── requirements.txt     # Dependencias del proyecto
-└── pets.sqlite3         # Base de datos SQLite (generada automáticamente)
+└── NutriBox.db         # Base de datos SQLite (generada automáticamente)
 ```
 
 ## Instalación
